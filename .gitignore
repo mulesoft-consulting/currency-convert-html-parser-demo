@@ -1,8 +1,7 @@
 .classpath
-.settings/
 .project
-target
+.settings/
+.studio
+target/
 .DS_Store
 bin/
-.idea/
-*.iml
