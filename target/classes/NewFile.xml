@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<masterdata>
+	<product>
+		<name>Das Produkt</name>
+		<price>15.6</price>
+		<currency>USD</currency>
+	</product>
+</masterdata>

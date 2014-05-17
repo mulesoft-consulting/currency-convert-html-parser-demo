@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="htmlparser">
+    <flow SubFlow="false" name="httpParserFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="e074ef3b-e92d-436d-b822-57b249df45b1">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="1"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" name="Stammdaten XML aus Verzeichnis abholen" type="org.mule.tooling.ui.modules.core.endpoint.fileEndpoint" entity-id="File#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="connector-ref"/>
+                    <property name="address"/>
+                    <property name="pollingFrequency"/>
+                    <property name="reverseOrder"/>
+                    <property name="moveToDirectory"/>
+                    <property name="fileAge"/>
+                    <property name="mimeType" value="text/xml"/>
+                    <property name="outputPattern"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="auxiliary;index" value="2"/>
+                    <property name="path" value="/Users/pat/Documents/customers/schenker/files"/>
+                    <property name="comparator"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="moveToPattern"/>
+                    <property name="transformer-refs"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="responseTimeout" value="10000"/>
+                </properties>
+            </endpoint>
+            <pattern name="XML to DOM" type="http://www.mulesoft.org/schema/mule/xml/xml-to-dom-transformer" entity-id="XML to DOM#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="outputEncoding"/>
+                    <property name="returnClass" value="org.dom4j.Document"/>
+                    <property name="mimeType"/>
+                    <property name="encoding"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="auxiliary;index" value="4"/>
+                </properties>
+            </pattern>
+            <scope name="Message Enricher" type="http://www.mulesoft.org/schema/mule/core/enricher" entity-id="Message Enricher#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="auxiliary;erased;source" value="true"/>
+                    <property name="auxiliary;erased;target" value="true"/>
+                    <property name="source" value=""/>
+                    <property name="updated"/>
+                    <property name="target" value=""/>
+                    <property name="auxiliary;index" value="5"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/enrich;1">
+                        <property name="source" value="#[payload[0]]"/>
+                        <property name="target" value="#[payload.rootElement.element('product').element('price').text]"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/enrich;2">
+                        <property name="source" value="#[payload[1]]"/>
+                        <property name="target" value="#[payload.rootElement.element('product').element('currency').text]"/>
+                    </property-collection>
+                </properties>
+                <description></description>
+                <compartment entity-id="compartment#1">
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+                        <pattern name="Flow Reference" type="http://www.mulesoft.org/schema/mule/core/flow-ref" entity-id="Flow Reference#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="name" value="parseFlow2"/>
+<property name="auxiliary;index" value="6"/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </scope>
+            <pattern name="DOM to XML" type="http://www.mulesoft.org/schema/mule/xml/dom-to-xml-transformer" entity-id="a00952cc-9852-4204-b7f7-fdf01b67b972">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties/>
+            </pattern>
+            <endpoint direction="Outbound" name="File" type="org.mule.tooling.ui.modules.core.endpoint.fileEndpoint" entity-id="File#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="connector-ref" value=""/>
+                    <property name="address" value=""/>
+                    <property name="auxiliary;erased;mimeType" value="true"/>
+                    <property name="mimeType" value=""/>
+                    <property name="outputPattern" value="output.txt"/>
+                    <property name="encoding" value=""/>
+                    <property name="disableTransportTransformer" value="false"/>
+                    <property name="auxiliary;index" value="7"/>
+                    <property name="path" value="/Users/pat/Documents/customers/schenker/files/output"/>
+                    <property name="auxiliary;erased;encoding" value="true"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events" value="false"/>
+                    <property name="ref" value=""/>
+                    <property name="transformer-refs" value=""/>
+                    <property name="businessEventsLabel" value=""/>
+                    <property name="updated"/>
+                    <property name="responseTimeout" value="10000"/>
+                </properties>
+                <description></description>
+            </endpoint>
+        </lane>
+    </flow>
+    <flow SubFlow="true" name="parseFlow2" type="http://www.mulesoft.org/schema/mule/core/subflow" entity-id="8d7d78cc-fa59-4a48-950e-d0f610377b77">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="8"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#3">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Outbound" name="Aufrufen des Google Currency Converters" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="connector-ref"/>
+                    <property name="address"/>
+                    <property name="method" value="GET"/>
+                    <property name="mimeType"/>
+                    <property name="encoding"/>
+                    <property name="httpLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="auxiliary;index" value="9"/>
+                    <property name="path" value="finance/converter?a=#[xpath('/masterdata/product/price').text]&amp;from=#[xpath('/masterdata/product/currency').text]&amp;to=EUR&amp;meta=ei%3DPNVzU7DsKoj6wAPkrIGYDQ"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="password"/>
+                    <property name="keep-alive"/>
+                    <property name="port" value="80"/>
+                    <property name="followRedirects"/>
+                    <property name="host" value="www.google.com"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="transformer-refs"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="user"/>
+                    <property name="contentType"/>
+                    <property name="responseTimeout"/>
+                </properties>
+            </endpoint>
+            <pattern name="File to String" type="http://www.mulesoft.org/schema/mule/file/file-to-string-transformer" entity-id="File to String#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="mimeType"/>
+                    <property name="encoding"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="auxiliary;index" value="10"/>
+                </properties>
+            </pattern>
+            <pattern name="Java" type="org.mule.tooling.ui.modules.core.pattern.customTransformer" entity-id="Java#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="mimeType"/>
+                    <property name="encoding"/>
+                    <property name="class" value="htmlparse.HtmlParser"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="auxiliary;index" value="11"/>
+                </properties>
+                <description></description>
+            </pattern>
+        </lane>
+    </flow>
+</mule-configuration>
